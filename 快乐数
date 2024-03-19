@@ -1,0 +1,32 @@
+class Solution {
+public:
+    //获得那个数的每个位置的平方和
+    int bitSum(int n)
+    {
+        int sum = 0;
+        while (n)
+        {
+            int t = n % 10;
+            sum += t * t;
+            n /= 10;
+        }
+        return sum;
+    }
+    bool isHappy(int n) {
+        int slow = n;
+        int fast = bitSum(n);
+        while (slow != fast)
+        {
+            slow = bitSum(slow);
+            fast = bitSum(bitSum(fast));
+        }
+        // if (slow == 1)
+        // {
+        //     return true;
+        // }
+        // return false;
+        return slow == 1;
+    }
+};
+
+https://leetcode.cn/problems/happy-number/
