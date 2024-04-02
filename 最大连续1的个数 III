@@ -33,3 +33,6 @@ public:
         return lenth;
     }
 };
+
+
+https://leetcode.cn/problems/max-consecutive-ones-iii/
