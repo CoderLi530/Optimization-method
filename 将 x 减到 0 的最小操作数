@@ -6,24 +6,38 @@ public:
         int lenth = -1;//操作数
         int sum = 0;
         int numsSum = 0;
+        //不能对数组排序，否则一些情况会不符合
+    //如:      [ 3, 2, 4 ] x = 6 最下操作数为2
+    //排序后:  [ 2, 3, 4 ] x = 6 最小操作数为-1
         //求出target
         for (int i = 0; i < nums.size(); ++i)
         {
             numsSum += nums[i];
         }
         int target = numsSum - x;
+        //如果x等于数组之和，那么最小操作数就是数组长度
+        if (target == 0)
+		{
+			return (int)nums.size();
+		}
         for (right; right < nums.size(); ++right)
         {
             sum += nums[right];
-            while (sum > target)
+            while (sum >= target && left <= right)//进窗口
             {
+                if (sum == target)//判断
+				{
+					lenth = max(lenth, right - left + 1);//更新结果
+                    sum -= nums[left];
+					left++;
+					break;
+				}
+                sum -= nums[left];
                 left++;
             }
-            if (sum == target)
-            {
-                lenth = max(lenth, right - left);
-            }
         }
+        //可能最后找不到符合条件操作数
+		return lenth == -1 ? lenth : nums.size() - lenth;
     }
 };
 
