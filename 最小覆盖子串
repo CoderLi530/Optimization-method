@@ -1,0 +1,41 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int minlen = INT_MAX, begin = -1;
+        //unordered_map<char, int> hash1;
+        int hash1[128] = {0};
+        int kinds = 0;
+        for (auto& ch : t) if (hash1[ch]++ == 0) ++kinds;  
+        //unordered_map<char, int> hash2;
+        int hash2[128] = {0};
+        for (int left = 0, right = 0, count = 0; right < s.length(); ++right)
+        {
+            //进窗口
+            char in = s[right];
+            ++hash2[in];
+            //if (hash1.count(in) && hash2[in] == hash1[in]) ++count;//维护count
+            if (hash2[in] == hash1[in]) ++count;
+            //判断
+            //while (count == hash1.size())
+            while (count == kinds)
+            {
+                //更新结果
+                //如果使用字符串或者vector<string>会超时
+                //可以直接记录最小的长度就可以了
+                if (minlen > right - left + 1)
+                {
+                    minlen = right - left + 1;
+                    begin = left;
+                }
+                //出窗口
+                char out = s[left++];
+                //if (hash1.count(out) && hash2[out] == hash1[out]) --count;//维护count
+                if (hash2[out]-- == hash1[out]) --count;
+                //if (--hash2[out] == 0) hash2.erase(out);
+            }
+        }
+        return begin == -1 ? "" : s.substr(begin, minlen);
+    }
+};
+
+https://leetcode.cn/problems/minimum-window-substring/
