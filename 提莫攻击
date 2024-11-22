@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int findPoisonedDuration(vector<int>& timeSeries, int duration) {
+        int ret = 0;//中毒秒数
+        int n = timeSeries.size();
+        for (int i = 1; i < n; ++i)
+        {
+            //发起攻击的两个时间之差>=duration，说明中毒时间为duration
+            if (timeSeries[i] - timeSeries[i - 1] > duration || timeSeries[i] - timeSeries[i - 1] == duration)
+            {
+                ret += duration;
+            }
+            //发起攻击的两个时间之差<duration，说明中毒计时会被重置，中毒时间为两个时间之差
+            else
+            {
+                ret += timeSeries[i] - timeSeries[i - 1];
+            }
+        }
+        ret += duration;
+        return ret;
+    }
+};
+
+https://leetcode.cn/problems/teemo-attacking/
