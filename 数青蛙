@@ -1,0 +1,83 @@
+https://leetcode.cn/problems/minimum-number-of-frogs-croaking/
+
+
+class Solution {
+public:
+    int minNumberOfFrogs(string croakOfFrogs) {
+        //1. 创建哈希表，创建一个字符串croak
+        unordered_map<char, int> hash;
+        string tmp("croak");
+        //2. 遍历字符串
+        for (int i = 0; i < croakOfFrogs.size(); ++i)
+        {
+            int index = tmp.find(croakOfFrogs[i]);//在tmp找到当前字符的下标
+            if (index == 0)//遍历到c字符
+            {
+                if (hash[tmp[4]]) hash[tmp[4]]--;
+                hash[tmp[index]]++;
+            }
+            else//遍历到其它字符
+            {
+                //找到前一个字符，判断是否存在
+                if (hash[tmp[index - 1]])
+                {
+                    hash[tmp[index - 1]]--;
+                    hash[tmp[index]]++;
+                }
+                else return -1;
+            }
+        }
+        //遍历完毕，哈希表中croa个数大于0，说明蛙鸣声（croak）不全，返回-1
+        if (hash['c'] || hash['r'] || hash['o'] || hash['a'])   return -1;
+        return hash['k'];
+
+        // //列举多个if else
+        // vector<int> arr(5);
+        // for (auto& ch : croakOfFrogs)
+        // {
+        //     if (ch == 'c')
+        //     {
+        //         if (arr[4]) arr[4]--;
+        //         arr[0]++;
+        //     }
+        //     else if (ch == 'r')
+        //     {
+        //         if (arr[0])
+        //         {
+        //             arr[0]--;
+        //             arr[1]++;
+        //         }
+        //         else return -1;
+        //     }
+        //     else if (ch == 'o')
+        //     {
+        //         if (arr[1])
+        //         {
+        //             arr[1]--;
+        //             arr[2]++;
+        //         }
+        //         else return -1;
+        //     }
+        //     else if (ch == 'a')
+        //     {
+        //         if (arr[2])
+        //         {
+        //             arr[2]--;
+        //             arr[3]++;
+        //         }
+        //         else return -1;
+        //     }
+        //     else
+        //     {
+        //         if (arr[3])
+        //         {
+        //             arr[3]--;
+        //             arr[4]++;
+        //         }
+        //         else return -1;
+        //     }
+        // }
+        // if (arr[0] || arr[1] || arr[2] || arr[3]) return -1;
+        // return arr[4];
+    }
+};
