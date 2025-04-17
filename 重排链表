@@ -13,8 +13,8 @@ https://leetcode.cn/problems/LGjMqU/
 class Solution {
 public:
     void reorderList(ListNode* head) {
-        //当链表只有一个节点时直接返回空
-        if (head->next == NULL) return;
+        //当链表只有一个节点或两个节点时直接返回空,不用重排
+        if (head->next == NULL || head->next->next == NULL) return;
         //1. 进行分割链表
         ListNode* fast = head, *slow = head;
         ListNode* end1 = NULL;
@@ -24,7 +24,7 @@ public:
             end1 = slow;
             slow = slow->next;
         }
-        end1->next = NULL;//防止越界访问的情况
+        end1->next = NULL;//链表断开，方便合并链表
         //2. 反转后半部分链表
         ListNode* prev = NULL, *cur = slow;
         while (cur)
@@ -37,23 +37,21 @@ public:
         //3. 在原链表上合并两个链表
         ListNode* cur1 = head->next, *cur2 = prev;
         ListNode* end = head;
-        while (cur1 && cur2)
+        //后半部分链表包括了slow指针，后半部分链表节点不会比前半部分链表节点少
+        while (cur2)
         {
             //先链接后半部分链表，再链接前半部分链表
-            ListNode* next1 = cur1->next, *next2 = cur2->next;
-            end->next = cur2;
-            end = end->next;
-            end->next = cur1;
-            end = end->next;
-            cur1 = next1;
-            cur2 = next2;
-        }
-        while (cur2) 
-        {
             ListNode* next2 = cur2->next;
             end->next = cur2;
             end = end->next;
             cur2 = next2;
+            if (cur1)
+            {
+                ListNode* next1 = cur1->next;
+                end->next = cur1;
+                end = end->next;
+                cur1 = next1;
+            }
         }
     }
 };
