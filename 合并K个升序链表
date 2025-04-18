@@ -1,0 +1,50 @@
+https://leetcode.cn/problems/vvXgSW/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    //合并两个有序链表
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2)
+    {
+        //数组为空或者有一个链表直接返回
+        if (l1 == nullptr || l2 == nullptr) return l1 ? l1 : l2;
+        ListNode* guard = new ListNode(0);
+        ListNode* end = guard;
+        ListNode* cur1 = l1, *cur2 = l2;
+        while (cur1 && cur2)
+        {
+            if (cur1->val > cur2->val)
+            {
+                end->next = cur2;
+                cur2 = cur2->next;
+            }
+            else
+            {
+                end->next = cur1;
+                cur1 = cur1->next;
+            }
+            end = end->next;
+        }
+        //自动链接后面的链表
+        end->next = cur1 ? cur1 : cur2;
+        return guard->next;
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) 
+    {
+        ListNode* ret = nullptr;
+        for (int i = 0; i < lists.size(); ++i)
+        {
+            ret = mergeTwoLists(ret, lists[i]);
+        }
+        return ret;
+    }
+};
