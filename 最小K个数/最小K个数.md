@@ -1,3 +1,8 @@
+[最小K个数]: https://leetcode.cn/problems/smallest-k-lcci/
+
+
+
+```c++
 class Solution {
 public:
 
@@ -27,5 +32,5 @@ public:
         return {arr.begin(), arr.begin() + k};
     }
 };
+```
 
-https://leetcode.cn/problems/smallest-k-lcci/
