@@ -1,0 +1,41 @@
+[Z字形变换]: https://leetcode.cn/problems/zigzag-conversion/
+
+
+
+```c++
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows == 1)//行数等于1，不用变形，直接返回原字符串
+        {
+            return s;
+        }
+        int n = s.length();//字符串的长度
+        int d = 2 * numRows - 2;//公差
+        string ret;
+        ret.resize(n);
+        int k = 0;//下标
+        for (int i = 0; i * d < n; ++i)//第0行
+        {
+            ret[k++] = s[0 + i * d];
+        }
+        for (int i = 1; i < numRows - 1; ++i)//第i行
+        {
+            for (int j = 0; i + j * d < n; ++j)
+            {
+                ret[k++] = s[i + j * d];
+                if (d - i + j * d < n)
+                {
+                    ret[k++] = s[d - i + j * d];
+                }
+            }
+        }
+        for (int i = numRows - 1, j = 0; i + j * d < n; ++j)//最后一行
+        {
+            ret[k++] = s[i + j * d];
+        }
+        return ret;
+    }
+};
+```
+
