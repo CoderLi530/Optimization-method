@@ -1,79 +1,44 @@
-//自己创建比较函数
-class KthLargest 
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<iostream>
+#include<functional>
+#include<vector>
+#include<unordered_map>
+#include<queue>
+#include<stack>
+
+using namespace std;
+
+void InsertSort(vector<int>& num, int val)
 {
-public:
-    struct cmp
+    //数组可能为空
+    if (num.size() == 0) num.push_back(val);
+    //遍历数组，num[i]与val比较，在合理位置进行插入，后面的元素进行覆盖
+    for (int i = 0; i < num.size(); ++i)
     {
-        bool operator() (int x, int y)
+        if (val >= num[i])
         {
-            return x > y;
-        }
-    };
-    priority_queue<int, vector<int>, cmp> pq;
-    KthLargest(int k, vector<int>& nums) 
-    {
-        //取k个数据放到pq当中
-        for (int i = 0; i < nums.size(); ++i)
-        {
-            //pq中元素等于k，进行比较更大值入队列
-            if (pq.size() == k)
+            //在i+1位置进行插入val，后面的元素进行覆盖
+            num.resize(num.size() + 1);
+            for (int j = num.size() - 1; j > i + 1; ++j)
             {
-                if (nums[i] > pq.top()) 
-                {
-                    pq.pop();
-                    pq.push(nums[i]);
-                }
+                num[j] = num[j - 1];
             }
-            //pq元素小于k存放元素
-            else pq.push(nums[i]);
-        }
-        //pq元素不满k个，进行补足k个
-        while (pq.size() != k) pq.push(INT_MIN);        
-    }
-    
-    int add(int val) 
-    {
-        //进行寻找第K大的元素
-        if (val > pq.top())
-        {
-            pq.pop();
-            pq.push(val);
-        }
-        return pq.top();
-    }
-};
-
-/**
- * Your KthLargest object will be instantiated and called as such:
- * KthLargest* obj = new KthLargest(k, nums);
- * int param_1 = obj->add(val);
- */
-
-
-
-//优化代码
- class KthLargest {
-    priority_queue<int, vector<int>, greater<int>> pq;
-    int _k;
-public:
-    KthLargest(int k, vector<int>& nums) {
-        _k = k;
-        for (auto x : nums)
-        {
-            pq.push(x);
-            if (pq.size() > _k) pq.pop();
+            num[i + 1] = val;
         }
     }
-    
-    int add(int val) {
-        pq.push(val);
-        if (pq.size() > _k) pq.pop();
-        return pq.top();
-    }
-};
+}
 
-/**
- * Your KthLargest object will be instantiated and called as such:
- * KthLargest* obj = new KthLargest(k, nums);
- * int param_1 = obj->add(val);
- */
+int main()
+{
+    vector<int> num;
+    InsertSort(num, 1);
+    InsertSort(num, 2);
+    InsertSort(num, 3);
+    InsertSort(num, 1);
+    InsertSort(num, 2);
+    InsertSort(num, 3);
+    InsertSort(num, 4);
+    InsertSort(num, 2);
+    return 0;
+}
