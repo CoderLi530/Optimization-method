@@ -1,3 +1,5 @@
+//题目链接：https://leetcode.cn/problems/linked-list-cycle-ii/?envType=study-plan-v2&envId=top-100-liked
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -6,31 +8,54 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-class Solution {
+class Solution 
+{
 public:
-    ListNode *detectCycle(ListNode *head) {
-        //没有节点
-        if (head == NULL) return NULL;
-
+    ListNode *detectCycle(ListNode *head) 
+    {
+        //链表的开始位置到环的入口的距离 == 相遇点到环入口的距离（逆时针）
+        //时间复杂度O(n) 空间复杂度O(1)
+        //使用快慢指针找到相遇点
+        if (head == nullptr || head->next == nullptr) return nullptr;
         ListNode* fast = head;
         ListNode* slow = head;
-        ListNode* begin = head;
-        while (slow->next != NULL && fast->next != NULL && fast->next->next != NULL)
+        bool isRing = false;
+        while (fast->next && fast->next->next)
         {
             fast = fast->next->next;
             slow = slow->next;
-            //判断链表是否有环
-            if (slow == fast)
+            if (fast == slow) 
             {
-                //有环找到入口。两个指针分别从起点和相遇点同时走，在入口会相遇。
-                while (begin != slow)
-                {
-                    begin = begin->next;
-                    slow = slow->next;
-                }
-                return begin;
-            } 
+                isRing = true;
+                break;
+            }
         }
-        return NULL;
+        //判断是否有环
+        if (!isRing || slow != fast) return nullptr;
+        //从链表的开始位置和相遇点同时出发，相遇时就是入口
+        ListNode* meet = slow;
+        ListNode* begin = head;
+        while (meet != begin)
+        {
+            meet = meet->next;
+            begin = begin->next;
+        }
+        //返回环的入口
+        return meet;
+
+        // //2. 使用哈希表，遍历链表时在哈希表中查找，有环的话找到的位置是入口，没有环返回nullptr
+        // //时间复杂度O(n) 空间复杂度O(n)
+        // unordered_set<ListNode*> hash;
+        // ListNode* cur = head;
+        // while (cur)
+        // {
+        //     if (hash.count(cur))
+        //     {
+        //         return cur;
+        //     }
+        //     hash.insert(cur);
+        //     cur = cur->next;
+        // }
+        // return nullptr;
     }
 };
