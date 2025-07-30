@@ -10,7 +10,7 @@ public:
         //2. 初始hash表
         hash[0] = 1;//处理sum - k 等于0时的情况
         int sum = 0, ret = 0;
-        for (auto x : nums)
+        for (auto x : nums) 
         {
             sum += x;
             if (hash.count(sum - k)) ret += hash[sum - k];
