@@ -92,3 +92,43 @@ public:
         return ret;
     }
 };
+
+
+//dfs
+class Solution
+{
+public:
+    void dfs(vector<vector<char>>& grid, vector<vector<bool>>& vis, int x, int y)
+    {
+        if (x >= 0 && x < grid.size() && y >= 0 && y < grid[0].size() && grid[x][y] == '1' && !vis[x][y])
+        {
+            vis[x][y] = true;
+            if (y - 1 >= 0 && y - 1 < grid[0].size()) dfs(grid, vis, x, y - 1);
+            if (y + 1 >= 0 && y + 1 < grid[0].size()) dfs(grid, vis, x, y + 1);
+            if (x - 1 >= 0 && x - 1 < grid.size()) dfs(grid, vis, x - 1, y);
+            if (x + 1 >= 0 && x + 1 < grid.size()) dfs(grid, vis, x + 1, y);
+        }
+    }
+
+    int numIslands(vector<vector<char>> &grid)
+    {
+        //dfs
+        //时间复杂度O(MN) 空间复杂度O(MN)
+        //遇到陆地，往一个方向一直走，直到遇到海洋或者越界或者已访问过的陆地才进行转移方向
+        int ret = 0;
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        for (int i = 0; i < m; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (grid[i][j] == '1' && !vis[i][j]) 
+                {
+                    ++ret;
+                    dfs(grid, vis, i, j);
+                }
+            }
+        }
+        return ret;
+    }
+};
