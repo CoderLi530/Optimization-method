@@ -1,3 +1,5 @@
+//bfs
+//时间复杂度O(M+N) 空间复杂度O(M+N)
 class Solution 
 {
 public:
@@ -38,6 +40,54 @@ public:
         for (int i = 0; i < numCourses; ++i)
         {
             if (in[i]) return false; // 有环返回false
+        }
+        return true;
+    }
+};
+
+//dfs
+//时间复杂度O(M+N) 空间复杂度O(M+N)
+class Solution
+{
+public:
+    bool dfs(vector<vector<int>> &edges, vector<int> &vis, int i)
+    {
+        // 情况1：当前节点正在搜索中（当前DFS路径上再次遇到）→ 存在环！
+        if (vis[i] == 1) return false;
+        // 情况2：当前节点已搜索完成（其所有后代均无环）→ 直接返回无环
+        if (vis[i] == 2) return true;
+    
+        // 情况3：节点未搜索，标记为“正在搜索”（加入当前DFS路径）
+        vis[i] = 1;
+    
+        // 递归遍历当前节点的所有后代（后续课程）
+        for (auto x : edges[i])
+        {
+            // 若任一后代存在环，当前节点所在路径也有环 → 返回false
+            if (!dfs(edges, vis, x)) return false;
+        }
+    
+        // 所有后代均无环，标记当前节点为“搜索完成”（退出当前DFS路径）
+        vis[i] = 2;
+        return true; // 当前子图无环
+    }
+
+    bool canFinish(int numCourses, vector<vector<int>> &prerequisites)
+    {
+        // dfs
+        vector<vector<int>> edges(numCourses);
+        vector<int> vis(numCourses); // 0表示未搜索，1表示正在搜索中，2表示搜索完成
+        for (auto arr : prerequisites)
+        {
+            edges[arr[1]].push_back(arr[0]); //对于[1, 0]，由0->1，先学习0再学习1
+        }
+        for (int i = 0; i < numCourses; ++i)
+        {
+            //未搜索的课程才进行dfs
+            if (vis[i] == 0)
+            {
+                if (!dfs(edges, vis, i)) return false;
+            }
         }
         return true;
     }
